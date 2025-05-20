@@ -1,4 +1,4 @@
-parpool
+parpool(32)
 
 rng('shuffle');
 ensemble = 'ConstantVariance';
@@ -7,7 +7,7 @@ binLambdaMin = 0.25;
 binLambdaMax = 14;
 nBins = 30;
 width = 1;
-numWalkers = 8;
+numWalkers = 32;
 tMax = 10000000;
 
 tensorEnsemble = metropolisRangeEnsemble(ensemble, N, binLambdaMin, binLambdaMax, nBins, width, numWalkers);

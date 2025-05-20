@@ -134,8 +134,8 @@ classdef metropolisRangeEnsemble
                 if min(obj.histogram) > mean(obj.histogram) * obj.b
                     obj.f = sqrt(obj.f);
                     obj.nc = obj.nc + 1;
-                    writematrix(obj.histogram, sprintf("./Histogram/Histogram_nc%i_N%i.txt", obj.nc, obj.N));
-                    writematrix(obj.logWeights, sprintf("./Histogram/Histogram_nc%i_N%i.txt", obj.nc, obj.N));
+                    writematrix(obj.histogram, sprintf("./Data/Histogram_nc%i_N%i_%s.txt", obj.nc, obj.N, obj.ensemble));
+                    writematrix(obj.logWeights, sprintf("./Data/Weights_nc%i_N%i_%s.txt", obj.nc, obj.N, obj.ensemble));
                     obj.histogram = obj.histogram * 0;
                 end
             end
