@@ -57,12 +57,18 @@ classdef metropolisRangeEnsemble
             obj.tensors = cell(numWalkers, 1);
             obj.lambdaMax = zeros(numWalkers, 1);
             for i=1:numWalkers
-                obj.tensors{i} = tensorInitializer(N);
-                s = rng;
-                lambda = zeig(double(full(obj.tensors{i})), 'symmetric');
-                rng(s);
-                obj.lambdaMax(i) = max(lambda);
+                obj.lambdaMax(i) = Inf;
+                % Make sure the initial lambda is within range of
+                % the interval
+                while ~(obj.lambdaMax(i) > obj.binLambdaMin && obj.lambdaMax(i) < obj.binLambdaMax)
+                    obj.tensors{i} = tensorInitializer(N);
+                    s = rng;
+                    lambda = zeig(double(full(obj.tensors{i})), 'symmetric');
+                    rng(s);
+                    obj.lambdaMax(i) = max(lambda);
+                end
             end
+            display(obj.lambdaMax);
 
             % Need to create temporary directories for each walker
             for i=1:obj.numWalkers
@@ -92,7 +98,7 @@ classdef metropolisRangeEnsemble
             
             lambdaMaxNewList = zeros(obj.numWalkers, 1);
             s = rng;
-            parfor i=1:obj.numWalkers
+            for i=1:obj.numWalkers
                 cd(sprintf("./tmp_%i", i));
                 lambda = zeig(newTensors{i}, 'symmetric');
                 lambdaMaxNewList(i) = max(lambda);
@@ -116,7 +122,7 @@ classdef metropolisRangeEnsemble
                         obj.tensors{i} = Anew;
                     end
 
-                    binLambda = computeBin(obj, lambdaMax);
+                    binLambda = computeBin(obj, obj.lambdaMax(i));
                     bins = [bins, binLambda];
                 end
             end

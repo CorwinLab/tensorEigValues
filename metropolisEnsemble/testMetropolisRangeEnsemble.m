@@ -1,4 +1,4 @@
-parpool(32)
+parpool(32);
 
 rng('shuffle');
 ensemble = 'ConstantVariance';
