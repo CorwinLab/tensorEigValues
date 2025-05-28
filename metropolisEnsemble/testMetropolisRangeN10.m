@@ -1,12 +1,11 @@
-parpool(32);
-
 rng('shuffle');
 ensemble = 'ConstantVariance';
-N = 3;
-binLambdaMin = 0.25;
-binLambdaMax = 14.25;
+N = 10;
+binLambdaMin = 3;
+binLambdaMax = 9;
+nBins = 30;
 width = 1;
-tMax = 10000000;
+tMax = 1000000;
 
 span = binLambdaMax - binLambdaMin;
 evenChunks = 16;
@@ -23,11 +22,11 @@ MCMCs = {};
 
 for i=1:length(lowerBinEdges)
     edge = lowerBinEdges(i);
-    metro = metropolisRange(ensemble, N, edge, edge+chunkWidth, 9, 1, i);
+    metro = metropolisRange(ensemble, N, edge, edge+chunkWidth, 8, 1, i+32);
     MCMCs{end+1} = metro;
 end
 
-
+parpool(32);
 parfor i=1:length(MCMCs)
     A = symtensor(@randn, 3, 3);
     singleMCMC = MCMCs{i};

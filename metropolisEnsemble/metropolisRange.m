@@ -104,7 +104,16 @@ classdef metropolisRange
             rng(s);
             cd("../");
             lambdaMaxNew = max(lambda);
-            
+
+            try
+                lambdaMaxNew > obj.binLambdaMin && lambdaMaxNew < obj.binLambdaMax;
+            catch ME
+                disp(ME);
+                display(lambda);
+                display(lambdaMaxNew);
+                return;
+            end
+
             if lambdaMaxNew > obj.binLambdaMin && lambdaMaxNew < obj.binLambdaMax
                 binLambdaNew = computeBin(obj, lambdaMaxNew);
                 binLambda = computeBin(obj, obj.lambdaMax);
@@ -128,9 +137,9 @@ classdef metropolisRange
                     obj.f = sqrt(obj.f);
                     obj.nc = obj.nc + 1;
                     
-                    [status, msg, msgID] = mkdir(sprintf("./Data/%i/", obj.nc));
-                    writematrix(obj.histogram, sprintf("./Data/%i/Histogram_%i_%s_%f.txt", obj.nc, obj.N, obj.ensemble, obj.binLambdaMin));
-                    writematrix(obj.logWeights, sprintf("./Data/%i/Weights_%i_%i_%s_%f.txt", obj.nc, obj.N, obj.ensemble, obj.binLambdaMin));
+                    [status, msg, msgID] = mkdir(sprintf("./Data/%i/%i/", obj.N, obj.nc));
+                    writematrix(obj.histogram, sprintf("./Data/%i/%i/Histogram_%s_%f.txt", obj.N, obj.nc, obj.ensemble, obj.binLambdaMin));
+                    writematrix(obj.logWeights, sprintf("./Data/%i/%i/Weights_%s_%f.txt", obj.N, obj.nc, obj.ensemble, obj.binLambdaMin));
                     obj.histogram = obj.histogram * 0;
                 end
             end
