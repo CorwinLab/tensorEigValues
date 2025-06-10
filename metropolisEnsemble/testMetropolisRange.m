@@ -1,35 +1,33 @@
-parpool(32);
-
 rng('shuffle');
 ensemble = 'ConstantVariance';
-N = 3;
-binLambdaMin = 0.25;
-binLambdaMax = 14.25;
-width = 1;
+N = 10;
+binLambdaMin = 6;
+binLambdaMax = 20;
+width = 0.2;
 tMax = 10000000;
 
 span = binLambdaMax - binLambdaMin;
-evenChunks = 16;
+evenChunks = 32;
 chunkWidth = span/evenChunks;
-oddChunks = 15;
+oddChunks = 31;
 evenList = binLambdaMin + chunkWidth * ((1:evenChunks) - 1);
 oddList = binLambdaMin + chunkWidth/2 + chunkWidth * ((1:oddChunks) - 1);
-%evenList(end+1) = binLambdaMax
-%oddList(end+1) = binLambdaMax - chunkWidth / 2
 
 lowerBinEdges = sort([evenList, oddList]);
 
-MCMCs = {};
+MCMCs = cell(length(lowerBinEdges), 1);
 
-for i=1:length(lowerBinEdges)
+parpool(64)
+
+disp("Initializing starting tensors");
+parfor i=1:length(lowerBinEdges)
     edge = lowerBinEdges(i);
-    metro = metropolisRange(ensemble, N, edge, edge+chunkWidth, 9, 1, i);
-    MCMCs{end+1} = metro;
+    metro = metropolisRange(ensemble, N, edge, edge+chunkWidth, 9, width, i);
+    MCMCs{i} = metro;
 end
-
+disp("Done initializing tensors");
 
 parfor i=1:length(MCMCs)
-    A = symtensor(@randn, 3, 3);
     singleMCMC = MCMCs{i};
     for t=1:tMax
         singleMCMC = singleMCMC.iterateTimeStep();

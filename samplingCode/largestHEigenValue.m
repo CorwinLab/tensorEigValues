@@ -1,4 +1,4 @@
-function [] = largestEigenValue(dir, sysID, seed, N, numSamples, ensemble)
+function [] = largestHEigenValue(dir, sysID, seed, N, numSamples, ensemble)
 
 directory = sprintf("%s", dir);
 cd(directory);
@@ -22,8 +22,11 @@ end
 for i=1:numSamples
     arr = getTensor(N);
     s = rng;
-    [lambda, V, res, cnd] = zeig(double(full(arr)));
+    [lambda, V, res, cnd] = heig(double(full(arr)));
     rng(s);
+    if isempty(lambda)
+        continue
+    end
     eigenValues(i, 1) = lambda(end);
     eigenValues(i, 2) = res(end);
 end
