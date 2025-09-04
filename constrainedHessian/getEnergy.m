@@ -1,6 +1,9 @@
-function energy = getEnergy(J, x)
-%UNTITLED Summary of this function goes here
+function energy = getEnergy(A, inputVec, p)
+%UNTITLED12 Summary of this function goes here
 %   Detailed explanation goes here
-    x = transpose(x);
-    energy = ttv(J, {x, x, x}, [1 2 3]);
+    inputVec = inputVec.';
+    vecs = cell(1, p);
+    vecs(:) = {inputVec};
+    axes = 1:p;
+    energy = double(ttv(full(A), vecs, axes));
 end

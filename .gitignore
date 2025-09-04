@@ -6,8 +6,19 @@ __pycache__/
 # C extensions
 *.so
 
-# Text files
+# Image files
+*.png 
+*.pdf 
+
+# Data files
+*.csv
+*.p 
+*.mat
+*.npy
 *.txt
+
+# Miscellaneous folders
+Data/
 
 # Distribution / packaging
 .Python

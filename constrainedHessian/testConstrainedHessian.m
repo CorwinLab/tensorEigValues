@@ -26,13 +26,14 @@ vecs = [x, y, z];
 energy = zeros(length(x), 1);
 
 for i=1:length(x)
-    energy(i) = getEnergy(tensor(J), vecs(i, :));
+    energy(i) = getEnergy(tensor(J), vecs(i, :), 3);
 end
 
 energy = reshape(energy, size(theta));
 [maxPhi, maxTheta, ~] = cart2sph(maxVector(1), maxVector(2), maxVector(3));
 
-figure
+h = figure;
+set(h, 'Visible', 'off');
 contourf(phi, theta, energy);
 hold on
 
@@ -51,3 +52,4 @@ for i=1:length(lambda)
     hold on
 end
 hold off
+saveas(h, "Figure.png")
