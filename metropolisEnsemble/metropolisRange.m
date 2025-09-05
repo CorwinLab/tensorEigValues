@@ -29,6 +29,7 @@ classdef metropolisRange
             %   Detailed explanation goes here
             
             % Initialize all the constants that we will need
+            
             obj.logWeights = zeros(nBins, 1);
             obj.histogram = zeros(nBins, 1);
             obj.nc = 0;
